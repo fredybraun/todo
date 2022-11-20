@@ -23,6 +23,20 @@ async function bootstrap() {
 
        return {taskCount}
     })  
+
+    fastify.get('/tasks/count/open',  async () => {
+        const taskCountOpen = await prisma.task.aggregate({
+            _count: true ,
+            where: {
+                status: true,
+            }
+
+        })
+
+        const tasksOpen  = taskCountOpen._count
+
+        return { tasksOpen }
+     })  
     
     fastify.post('/tasks',  async (request, reply) => {
         const createTaskBody = z.object({
