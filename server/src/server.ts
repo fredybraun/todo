@@ -37,6 +37,19 @@ async function bootstrap() {
 
         return { tasksOpen }
      })  
+
+     fastify.get('/tasks',  async (request, reply) => {
+        const tasks = await prisma.task.findMany({
+           
+        });
+
+        if (!tasks) {
+            return reply.status(404).send('Post not found.')
+        } else {
+            return { tasks }
+        }
+
+     })  
     
     fastify.post('/tasks',  async (request, reply) => {
         const createTaskBody = z.object({
@@ -53,8 +66,10 @@ async function bootstrap() {
         }
        })
 
-      return reply.status(201).send({ name });
+      return reply.status(201).send('Task creaded.');
     }) 
+
+    fastify.put
 
 
     await fastify.listen({ host: 'localhost', port:3333 });
