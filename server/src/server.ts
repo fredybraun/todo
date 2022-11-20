@@ -11,18 +11,18 @@ const prisma = new PrismaClient({
 async function bootstrap() {
     const fastify = Fastify({
         logger: true
-    })
+    });
 
     await fastify.register(cors, {
         origin: true,
-    })
+    });
 
     //ROTAS
     fastify.get('/tasks/count',  async () => {
        const taskCount = await prisma.task.count();
 
        return {taskCount}
-    })  
+    });
 
     fastify.get('/tasks/count/open',  async () => {
         const taskCountOpen = await prisma.task.aggregate({
@@ -36,7 +36,7 @@ async function bootstrap() {
         const tasksOpen  = taskCountOpen._count
 
         return { tasksOpen }
-     })  
+    });  
 
      fastify.get('/tasks',  async (request, reply) => {
         const tasks = await prisma.task.findMany({
@@ -49,7 +49,7 @@ async function bootstrap() {
             return { tasks }
         }
 
-     })  
+    });  
     
     fastify.post('/tasks',  async (request, reply) => {
         const createTaskBody = z.object({
@@ -67,9 +67,28 @@ async function bootstrap() {
        })
 
       return reply.status(201).send('Task creaded.');
-    }) 
+    }); 
 
-    fastify.put
+    fastify.put('/tasks/update/:id', async (request, reply) => {
+        const getTaskParams = z.object({
+            id: z.string(),
+        });
+
+        const { id }  = getTaskParams.parse(request.params);
+
+        const updateStatus = await prisma.task.update({
+            where: {
+                id: id,
+            },
+            data: {
+                status: false
+            }
+        });
+
+        if (updateStatus) {
+            return reply.status(201).send('Post updated.');
+        }
+    });
 
 
     await fastify.listen({ host: 'localhost', port:3333 });
