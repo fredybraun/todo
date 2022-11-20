@@ -1,6 +1,7 @@
 import Fastify from 'fastify';
 import cors from '@fastify/cors'
 import { PrismaClient } from '@prisma/client';
+import { z } from 'zod';
 
 
 const prisma = new PrismaClient({
@@ -21,6 +22,24 @@ async function bootstrap() {
        const taskCount = await prisma.task.count();
 
        return {taskCount}
+    })  
+    
+    fastify.post('/tasks',  async (request, reply) => {
+        const createTaskBody = z.object({
+            name: z.string(),
+        })
+
+       const { name }  = createTaskBody.parse(request.body)
+
+       await prisma.task.create({
+        data: {
+            name, 
+            status: true,
+            order: '1',
+        }
+       })
+
+      return reply.status(201).send({ name });
     }) 
 
 
