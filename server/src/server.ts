@@ -90,6 +90,24 @@ async function bootstrap() {
         }
     });
 
+    fastify.delete('/tasks/delete/:id', async (request, reply) => {
+        const getTaskParams = z.object({
+            id: z.string(),
+        });
+
+        const { id }  = getTaskParams.parse(request.params);
+
+        const deleteTask = await prisma.task.delete({
+            where: {
+                id: id,
+            },
+        });
+
+        if (deleteTask) {
+            return reply.status(201).send('Post deleted.');
+        }
+    });
+
 
     await fastify.listen({ host: 'localhost', port:3333 });
 }
