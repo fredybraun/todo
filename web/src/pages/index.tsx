@@ -1,15 +1,15 @@
-
+import { TaskList } from '../components/Tasks';
+import { FooterLinks }  from '../components/FooterLinks';
 import { api } from '../lib/axios';
 
 
 interface HomeProps {
-tasks: number;
+tasks: number,
 taskList: [{
   id: string,
   name: string,
   status: boolean,
 }]
-
 }
 
 
@@ -32,30 +32,11 @@ export default function Home(props: HomeProps) {
               placeholder='Create a new todo...'>
             </input>
             <button></button>
-            <ul>
-              {props.taskList.map( (tasks) => {
-                return (
-                <a  href={tasks.id}>
-                  <li className='
-                    h-16 w-542 mt-1
-                    bg-blue-deep 
-                    border-solid 
-                    border-2 
-                    border-gray-700 
-                    rounded-md 
-                    ' key={tasks.id}>
-                     <input type='checkbox' className='h-4 w-4'  />
-                      {tasks.name}
-                  </li>
-                </a>);
-              })}
-            </ul> 
+            
+            <TaskList taskList={ props.taskList } />
+
           </div>
-          <div>
-            <a href='#' className='text-gray-500'>{props.tasks} items left</a>
-            <a href='#' className='text-gray-500'>All Activite Complete</a>
-            <a href='#' className='text-gray-500'>Clear completed</a>
-          </div>
+          <FooterLinks tasks={props.tasks}/>
         </div>
     </div>
   )
