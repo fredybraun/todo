@@ -20,8 +20,6 @@ module.exports = {
     letterSpacing:{
       largest: '1.5rem'
     }
-
-    
   },
   plugins: [],
 }
