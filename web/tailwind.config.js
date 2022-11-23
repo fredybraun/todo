@@ -9,10 +9,12 @@ module.exports = {
         sans: 'Josefin Sans',
       },
       spacing: {
+        '526': '38rem',
         '542': '42rem',
       },
       colors: {
         'blue-deep': '#25273C',
+        'blue-button': '#4777DB',
         'blue-deep-bg': '#161622',
         'gray-500': '#6C6E83'
       },

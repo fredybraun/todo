@@ -6,7 +6,7 @@ async function main() {
     const task = await prisma.task.create({
         data: {
             name: 'Task 01 teste',
-            status:   true,
+            status:  'checked',
             order:    '1',
         }
     });

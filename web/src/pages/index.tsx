@@ -21,7 +21,7 @@ export default function Home(props: HomeProps) {
           <div className='py-10'>
             <input 
               className='
-                h-16 w-542 
+                h-16 w-526 
                 bg-blue-deep 
                 border-solid 
                 border-2 
@@ -31,7 +31,15 @@ export default function Home(props: HomeProps) {
                 ' 
               placeholder='Create a new todo...'>
             </input>
-            <button></button>
+            <button className='
+                h-16 w-16
+                bg-blue-button 
+                border-solid 
+                border-2 
+                border-gray-700 
+                rounded-md' >Submit</button>
+
+
             
             <TaskList taskList={ props.taskList } />
 
