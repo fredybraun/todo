@@ -1,7 +1,15 @@
-import Image  from 'next/image'
+
+import { api } from '../lib/axios';
+
 
 interface HomeProps {
 tasks: number;
+taskList: [{
+  id: string,
+  name: string,
+  status: boolean,
+}]
+
 }
 
 
@@ -25,14 +33,26 @@ export default function Home(props: HomeProps) {
             </input>
             <button></button>
             <ul>
-              <li>asd</li>
-              <li>asd</li>
-              <li>asd</li>
-              <li>asd</li>
+              {props.taskList.map( (tasks) => {
+                return (
+                <a  href={tasks.id}>
+                  <li className='
+                    h-16 w-542 mt-1
+                    bg-blue-deep 
+                    border-solid 
+                    border-2 
+                    border-gray-700 
+                    rounded-md 
+                    ' key={tasks.id}>
+                     <input type='checkbox' className='h-4 w-4'  />
+                      {tasks.name}
+                  </li>
+                </a>);
+              })}
             </ul> 
           </div>
           <div>
-            <a href='#' className='text-gray-500'>5 items left</a>
+            <a href='#' className='text-gray-500'>{props.tasks} items left</a>
             <a href='#' className='text-gray-500'>All Activite Complete</a>
             <a href='#' className='text-gray-500'>Clear completed</a>
           </div>
@@ -42,13 +62,17 @@ export default function Home(props: HomeProps) {
 }
 
 
-// export const getServerSideProps =  async () => {
-//   const response = await fetch('http://localhost:3333/tasks/count/open');
-//   const data = await response.json();
+export const getServerSideProps =  async () => {
+  const [ taskCountOpenResponse, taskListResponse ] = await Promise.all([
+    api.get('/tasks/count/open'),
+    api.get('/tasks'),
+  ]);
 
-//   return {
-//     props: {
-//       tasks: data.tasksOpen
-//     }
-//   }
-// }
+  return {
+    props: {
+      tasks: taskCountOpenResponse.data.tasksOpen,
+      taskList: taskListResponse.data.tasks
+    },
+  }
+  
+}
