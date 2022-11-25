@@ -17,7 +17,6 @@ export async function taskRoutes(fastify: FastifyInstance) {
             where: {
                 status: true,
             }
-
         })
 
         const tasksOpen  = taskCountOpen._count
