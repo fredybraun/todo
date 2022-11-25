@@ -7,7 +7,7 @@ export function StatusCheck(props: StatusCheck ) {
     
 
     return (
-        <input type='checkbox' checked={!props.status} className='
+        <input type='checkbox' defaultChecked={!props.status} className='
             ml-4 mt-4
             form-check-input 
             appearance-none 
