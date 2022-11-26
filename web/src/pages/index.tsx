@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useState, useEffect } from 'react';
 
 import { TaskList } from '../components/Tasks';
 import { FooterLinks }  from '../components/FooterLinks';
@@ -7,7 +7,7 @@ import { api } from '../lib/axios';
 
 
 interface HomeProps {
-tasks: number,
+tasks: string,
 taskList: [{
   id: string,
   name: string,
@@ -17,21 +17,27 @@ taskList: [{
 
 
 export default function Home(props: HomeProps) {
-  const [taskTitle, setTaskTitle] = useState('');
+  const [ taskTitle, setTaskTitle ] = useState('');
+
+  useEffect(() => {
+  },[taskTitle])
 
   async function createTask(event: FormEvent) {
     event.preventDefault();
-
+    
     try {
-      api.post('/tasks', {
+      const response = await api.post('/tasks', {
         name: taskTitle,
       }); 
+
+      setTaskTitle('');
+
     } catch (error) {
+      console.error(error);
       alert('Fail to create task!');
-    }
+    } 
   }
-
-
+  
   return (
     <div className='flex justify-center'>
         <div className='py-20'>
@@ -40,20 +46,19 @@ export default function Home(props: HomeProps) {
             <form onSubmit={createTask}>
               <input 
                 className='
-                  h-16 w-526 
+                  h-16 w-526
                   pl-16
                   text-white
                   bg-blue-deep 
                   border-solid 
                   border-2 
                   border-gray-700 
-                  rounded-md 
-                  placeholder:px-16' 
+                  rounded-md ' 
                 placeholder='Create a new todo...'
-                onChange={event => setTaskTitle(event.target.value)}  
+                onChange={event => setTaskTitle(event.target.value)}
+                value={taskTitle}  
                 />
                 
-
               <button 
                 type='submit' 
                 className='
@@ -62,14 +67,11 @@ export default function Home(props: HomeProps) {
                   border-solid 
                   border-2 
                   border-gray-700 
-                  rounded-md' >Submit
+                  rounded-md'>Submit
               </button>
             </form>
-            
-
-
-            
-            <TaskList taskList={ props.taskList } />
+ 
+            <TaskList taskList={ props.taskList }  />
 
           </div>
           <FooterLinks tasks={props.tasks}/>
@@ -77,7 +79,6 @@ export default function Home(props: HomeProps) {
     </div>
   )
 }
-
 
 export const getServerSideProps =  async () => {
   const [ taskCountOpenResponse, taskListResponse ] = await Promise.all([
@@ -90,6 +91,5 @@ export const getServerSideProps =  async () => {
       tasks: taskCountOpenResponse.data.tasksOpen,
       taskList: taskListResponse.data.tasks
     },
-  }
-  
-}
+  } 
+}  

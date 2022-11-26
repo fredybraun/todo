@@ -93,4 +93,17 @@ export async function taskRoutes(fastify: FastifyInstance) {
             return reply.status(201).send('Post deleted.');
         }
     }); 
+
+    fastify.delete('/tasks/delete', async (request, reply) => {
+
+        const deleteTasks = await prisma.task.deleteMany({
+            where: {
+                status: false,
+            },
+        });
+
+        if (deleteTasks) {
+            return reply.status(201).send('Posts deleted.');
+        }
+    }); 
 }

@@ -1,8 +1,23 @@
+import { api } from "../lib/axios";
+
 export interface FooterLinksProps {
-  tasks: number,  
+  tasks: string,  
 }
 
 export function FooterLinks (props: FooterLinksProps) {
+
+  async function deleteTasks() {
+        
+    try {
+        await api.delete('/tasks/delete', {
+        }); 
+
+    } catch (error) {
+        console.error(error);
+        alert('Fail to change task!');
+    } 
+  }
+
   return (
     <div className='flex 
     justify-center 
@@ -16,7 +31,7 @@ export function FooterLinks (props: FooterLinksProps) {
     rounded-md '>
       <a href='#' className='text-gray-500'>{props.tasks} items left</a>
       <a href='#' className='text-gray-500'>All Activite Complete</a>
-      <a href='#' className='text-gray-500'>Clear completed</a>
+      <a onClick={deleteTasks} href='#' className='text-gray-500'>Clear completed</a>
     </div>
   )
 }

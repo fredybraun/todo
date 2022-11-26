@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { StatusCheck } from './StatusCheck';
 
 export interface TaskProps {
@@ -8,12 +9,14 @@ export interface TaskProps {
     }]
 }
 
-
 export function TaskList(props: TaskProps) {
-    const tasks = props.taskList;
+    const [ taskIdProps, setTaskIdProps ] = useState('');
 
+    const tasks = props.taskList;
+    
     const listTasks = tasks.map((tasks) => 
-        <li className='
+        <li 
+            className='
                 flex
                 h-16 w-542 mt-1
                 bg-blue-deep 
@@ -24,7 +27,7 @@ export function TaskList(props: TaskProps) {
                 rounded-md ' 
             key={tasks.id}>
 
-            <StatusCheck status={tasks.status}/>
+            <StatusCheck status={tasks.status} id={tasks.id}/>
 
             <div style={{ 
                     textDecorationLine: !tasks.status? 'line-through': 'none', 
@@ -32,9 +35,10 @@ export function TaskList(props: TaskProps) {
                 }} 
                 className='ml-6 mt-4' >{tasks.name}
             </div>
-        </li>
+        </li>   
     );
     return (
-      <ul>{listTasks}</ul>
+        <ul>{listTasks}</ul>
     );
   }
+
