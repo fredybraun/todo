@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { StatusCheck } from './StatusCheck';
+import { TextTask } from './TextTask';
 
-export interface TaskProps {
+export interface TasksProps {
     taskList: [{
         id: string,
         name: string,
@@ -9,8 +10,7 @@ export interface TaskProps {
     }]
 }
 
-export function TaskList(props: TaskProps) {
-    const [ taskIdProps, setTaskIdProps ] = useState('');
+export function TaskList(props: TasksProps) {
 
     const tasks = props.taskList;
     
@@ -29,16 +29,13 @@ export function TaskList(props: TaskProps) {
 
             <StatusCheck status={tasks.status} id={tasks.id}/>
 
-            <div style={{ 
-                    textDecorationLine: !tasks.status? 'line-through': 'none', 
-                    color: !tasks.status? '#6C6E83' : 'white'  
-                }} 
-                className='ml-6 mt-4' >{tasks.name}
-            </div>
+            <TextTask  name={tasks.name} status={tasks.status}/>
+
         </li>   
     );
+
     return (
         <ul>{listTasks}</ul>
-    );
+    );   
   }
 

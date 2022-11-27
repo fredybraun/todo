@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { api } from "../lib/axios";
 
 export interface FooterLinksProps {
@@ -5,9 +6,14 @@ export interface FooterLinksProps {
 }
 
 export function FooterLinks (props: FooterLinksProps) {
+  const [ tasksNumber, setTasksNumber ] = useState('');
 
+  useEffect(() => {
+    setTasksNumber(props.tasks);
+  })
+  
   async function deleteTasks() {
-        
+    
     try {
         await api.delete('/tasks/delete', {
         }); 
@@ -15,7 +21,7 @@ export function FooterLinks (props: FooterLinksProps) {
     } catch (error) {
         console.error(error);
         alert('Fail to change task!');
-    } 
+    }  
   }
 
   return (
@@ -29,9 +35,9 @@ export function FooterLinks (props: FooterLinksProps) {
     border-2 
     border-gray-700 
     rounded-md '>
-      <a href='#' className='text-gray-500'>{props.tasks} items left</a>
+      <a href='#' className='text-gray-500'>{tasksNumber} items left</a>
       <a href='#' className='text-gray-500'>All Activite Complete</a>
-      <a onClick={deleteTasks} href='#' className='text-gray-500'>Clear completed</a>
+      <a onClick={deleteTasks} href='http://localhost:3000' className='text-gray-500'>Clear completed</a>
     </div>
   )
 }

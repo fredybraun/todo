@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { api } from '../lib/axios';
 
 export interface StatusCheck {
@@ -7,8 +8,12 @@ export interface StatusCheck {
 
 export function StatusCheck(props: StatusCheck ) {
 
+    const [ checked, setChecked ] = useState(true)
+
     async function udateTask() {
-        
+
+        setChecked(!checked);
+
         try {
             await api.put(`/tasks/update/${props.id}`, {
             }); 
@@ -33,7 +38,7 @@ export function StatusCheck(props: StatusCheck ) {
                 bg-blue-deep 
                 checked:bg-blue-button 
                 checked:border-gray-700' 
-            onClick={udateTask}    
+            onClick={udateTask}   
         />
     )
 }

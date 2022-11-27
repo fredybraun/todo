@@ -5,22 +5,47 @@ import { FooterLinks }  from '../components/FooterLinks';
 
 import { api } from '../lib/axios';
 
-
-interface HomeProps {
-tasks: string,
-taskList: [{
-  id: string,
-  name: string,
-  status: boolean,
-}]
+interface taskProps {
+  tasks: string,
 }
 
+interface tasksProps {
+  taskList: {
+    id: string,
+    name: string,
+    status: boolean,
+  }
+}
 
-export default function Home(props: HomeProps) {
+export default function Home(props: [  taskProps, tasksProps ]
+) {
   const [ taskTitle, setTaskTitle ] = useState('');
-
+  const [ taskCount, setTaskCount ] = useState('0');
+  const [ taskContent, setTaskContent ] = useState<tasksProps[]>([]);
+  
   useEffect(() => {
+    getTasks()
+    getTasksCount() 
   },[taskTitle])
+
+  async function getTasks() {
+  try {
+    const response = await api.get('/tasks');
+    setTaskContent(response.data.tasks);  
+  } catch (error) {
+    console.error(error);
+  }
+  }
+
+  async function getTasksCount() {
+    try {
+      const response = await api.get('/tasks/count/open');
+      setTaskCount(response.data.tasksOpen);
+      
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   async function createTask(event: FormEvent) {
     event.preventDefault();
@@ -67,29 +92,20 @@ export default function Home(props: HomeProps) {
                   border-solid 
                   border-2 
                   border-gray-700 
-                  rounded-md'>Submit
+                  rounded-md'
+                  onClick={getTasksCount}
+                  >Submit
               </button>
             </form>
  
-            <TaskList taskList={ props.taskList }  />
+            <TaskList taskList={taskContent}/>
 
           </div>
-          <FooterLinks tasks={props.tasks}/>
+
+          <FooterLinks tasks={taskCount}/>
+        
         </div>
     </div>
   )
 }
-
-export const getServerSideProps =  async () => {
-  const [ taskCountOpenResponse, taskListResponse ] = await Promise.all([
-    api.get('/tasks/count/open'),
-    api.get('/tasks'),
-  ]);
-
-  return {
-    props: {
-      tasks: taskCountOpenResponse.data.tasksOpen,
-      taskList: taskListResponse.data.tasks
-    },
-  } 
-}  
+  
